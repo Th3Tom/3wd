@@ -9,63 +9,59 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include "robo.h"
+#include "uart0.h"
 
 int main(void)
 {
-	robo_init(39999);
+	uint16_t speed = 0;
+
+	uart0_init(9600, 1, 1);
+	robo_init(59999);
+	//robo_init(39999);
 	
 	//robo_drive( 65535, 65535, 65535);
-	robo_drive( 39999, 39999, 39999);
-	//robo_drive( 0, 0, 0);
-	///*
-	robo_direction(0, 0, 0);
+	//robo_drive( 59999, 59999, 59999);
+	//robo_drive( 39999, 39999, 39999);
+	robo_drive( 0, 0, 0);
+
+	robo_direction_1(0, 0, 0);
 	robo_direction_2(1, 1, 1);
-	//*/
 
-	/*
-	//not working
-	robo_direction(1, 1, 1);
-	robo_direction_2(0, 0, 0);
-	//*/
-
-	//dir 1
-	/*
-	PORT_DIRECTION |= (1 << DIRECTION_1);
-	PORT_DIR_1_2 &= ~(1 << PIN_DIR_1_2);
-	//*/
-
-	/*
-	PORT_DIRECTION |= (1 << DIRECTION_2);
-	PORT_DIR_2_2 &= ~(1 << PIN_DIR_2_2);
-	//*/
-
-	/*
-	PORT_DIRECTION |= (1 << DIRECTION_3);
-	PORT_DIR_3_2 &= ~(1 << PIN_DIR_3_2);
-	//*/
-
-	//dir 0
-	/*
-	PORT_DIRECTION &= ~(1 << DIRECTION_1);
-	PORT_DIR_1_2 |= (1 << PIN_DIR_1_2);
-	//*/
-
-	/*
-	PORT_DIRECTION &= ~(1 << DIRECTION_2);
-	PORT_DIR_2_2 |= (1 << PIN_DIR_2_2);
-	//*/
-
-	/*
-	PORT_DIRECTION &= ~(1 << DIRECTION_3);
-	PORT_DIR_3_2 |= (1 << PIN_DIR_3_2);
-	//*/
-
-
-	/*
-	robo_wheel_1(100, 1);
-	robo_wheel_2(50, 0);
-	robo_wheel_3(50, 1);
-	//*/
 	
-    while(1);
+    while(1){
+		robo_wheel_1(speed, 0, 1);
+		uart0_putIntAsDigits(speed);
+		uart0_newLine();
+
+		switch(uart0_getc()){
+		//+-1
+			case '4':
+				speed += 1;
+				break;
+			case '1':
+				speed -= 1;
+				break;
+		//+-10
+			case '5':
+				speed += 10;
+				break;
+			case '2':
+				speed -= 10;
+				break;
+		//+-100
+			case '6':
+				speed += 100;
+				break;
+			case '3':
+				speed -= 100;
+				break;
+		//+-1000
+			case '8':
+				speed += 1000;
+				break;
+			case '9':
+				speed -= 1000;
+				break;
+		}
+	}
 }
