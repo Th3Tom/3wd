@@ -6,7 +6,7 @@
  */ 
 
 //File name: servo.c
-//Author: Schabhüttl Patrick
+//Author: SchabhÃ¼ttl Patrick
 //Date of last Change: 1.10.2015
 //Description: Functions too control the roboter and to configure the timer
 
@@ -18,6 +18,8 @@ void robo_init (uint16_t TOP_value)
 {	
 	DDRH |= ((1<<ENABLE_3) | (1<<ENABLE_2) | (1<<ENABLE_1)); //PWM output on servo
 	DDRB |= ((1 << DIRECTION_1) | (1 << DIRECTION_2) | (1 << DIRECTION_3));
+	DDRE |= ((1 << PIN_DIR_1_2) | (1 << PIN_DIR_3_2));
+	DDRG |= (1 << PIN_DIR_2_2);
 	
 	//set timer 4 to fast-pwm-mode with ICR as TOP register
 	TCCR4B |= ((1<<WGM43) | (1<<WGM42));
